@@ -8,47 +8,204 @@ function Square({value, onSquareClicked}){
   );
 }
 
+export enum FieldTypes {
+    default,
+    dot,
+    knightBlack,
+    knightWhite,
+    knightBlackAttacked,
+    knightWhiteAttacked,
+    queenBlack,
+    queenWhite,
+    queenBlackAttacked,
+    queenWhiteAttacked,
+}
+export enum Turn {
+    white,
+    black,
+}
+
 function Board({squares,isSelected}){
 
     function removeDots(fields){
         for(let field = 0; field < fields.length; field++){
-            if(fields[field] === 1)
+            if(fields[field] === FieldTypes.dot)
             {
-                fields[field] = 0;
+                fields[field] = FieldTypes.default;
             }
         }
         return fields;
     }
-    function handleSquareClicked(i){
+    function setPrediction(square, turn) {
+        if (turn === Turn.white
+            ? square !== FieldTypes.knightWhite && square !== FieldTypes.queenWhite
+            : square !== FieldTypes.knightBlack && square !== FieldTypes.queenBlack) {
+            switch (square) {
+                case FieldTypes.knightBlack:
+                {
+                    square = FieldTypes.knightBlackAttacked;
+                    break;
+                }
+                case FieldTypes.knightWhite:
+                {
+                    square = FieldTypes.knightWhiteAttacked;
+                    break;
+                }
+                case FieldTypes.queenBlack:
+                {
+                    square = FieldTypes.queenBlackAttacked;
+                    break;
+                }
+                case FieldTypes.queenWhite:
+                {
+                    square = FieldTypes.queenWhiteAttacked;
+                    break;
+                }
+                default:
+                    square = FieldTypes.dot;
+            }
+        }
+    }
+    function setQueenPrediction(square,turn){
+        if(turn === Turn.white)
+        {
+            if(square === FieldTypes.queenWhite || square === FieldTypes.knightWhite)
+                return true;
+            setPrediction(square, turn);
+            if(square === FieldTypes.queenBlack || square === FieldTypes.knightBlack)
+                return true;
+        }
+        else {
+            if(square === FieldTypes.queenBlack || square === FieldTypes.knightBlack)
+                return true;
+            setPrediction(square, turn);
+            if(square === FieldTypes.queenWhite || square === FieldTypes.knightWhite)
+                return true;
+        }
+    }
+    function handleSquareClicked(i,turn){
         if(isSelected !== -1)
         {
-            //default = 0;
-            //dot = 1;
-            //knight b/w bA/wA = 2,3,4,5
-            //queen b/w bA/wA = 6,7,8,9
-
             //Clicked on invalid field
-            if(i === isSelected || squares[i] === 0 || squares[i] === 2
-                || squares[i] === 3 || squares[i] === 6 || squares[i] === 7)
+            if(i === isSelected || squares[i] === FieldTypes.default || squares[i] === FieldTypes.knightBlack
+                || squares[i] === FieldTypes.knightWhite || squares[i] === FieldTypes.queenBlack
+                || squares[i] === FieldTypes.queenWhite)
             {
                 isSelected = -1;
             }
-            //CLicked on valid field dot
-            else if(squares[i] === 1){
+            //Clicked on valid field dot
+            else{
                 squares = removeDots(squares);
                 squares[i] = squares[isSelected];
-                squares[isSelected] = 0;
+                squares[isSelected] = FieldTypes.default;
                 isSelected = -1;
             }
-            //Clicked on valid field attack knight
-            else if (squares[i] === 4 || squares[i] === 5)
-            {
-                //TODO: Defeat Knight
-            }
-            //Clicked on valid field attack queen
-            else if (squares[i] === 8 || squares[i] === 9)
-            {
-                //TODO: Defeat Queen
+        }
+        else {
+            isSelected = i;
+            switch (squares[i]){
+                case FieldTypes.knightBlack || FieldTypes.knightWhite:
+                {
+                    //***
+                    // *
+                    // k
+                    if(i-16 >= 0){
+                        if(i % 8 !== 7 )
+                            setPrediction(squares[i-15], turn);
+                        if(i % 8 !== 0)
+                            setPrediction(squares[i-17], turn);
+                    }
+
+                    // k
+                    // *
+                    //***
+                    if(i+16 <= 63){
+                        if(i % 8 !== 7)
+                            setPrediction(squares[i+17], turn);
+                        if(i % 8 !== 0)
+                            setPrediction(squares[i+15], turn);
+                    }
+
+                    //    *
+                    //k * *
+                    //    *
+                    if(i % 8 < 6){
+                        if(i-8 > 0 )
+                            setPrediction(squares[i-6], turn);
+                        if(i+8 < 63)
+                            setPrediction(squares[i+10], turn);
+                    }
+
+                    //*
+                    //* * k
+                    //*
+                    if(i % 8 > 1){
+                        if(i-8 > 0 )
+                            setPrediction(squares[i-10], turn);
+                        if(i+8 < 63)
+                            setPrediction(squares[i+6], turn);
+                    }
+                    break;
+                }
+                case FieldTypes.queenBlack || FieldTypes.queenWhite:
+                {
+                    // q - right
+                    for(let q = i + 1; q % 8 > 0 && q < 64; q++)
+                    {
+                        if(setQueenPrediction(squares[q],turn))
+                            break;
+                    }
+
+                    // q - left
+                    for(let q = i-1; q % 8 < 7 && q >= 0; q--)
+                    {
+                        if(setQueenPrediction(squares[q],turn))
+                            break;
+                    }
+
+                    // q - up
+                    for(let q = i - 8; q >= 0; q = q - 8)
+                    {
+                        if(setQueenPrediction(squares[q],turn))
+                            break;
+                    }
+
+                    // q - down
+                    for(let q = i + 8; q < 64; q = q + 8)
+                    {
+                        if(setQueenPrediction(squares[q],turn))
+                            break;
+                    }
+                    // q - right/up
+                    for(let q = i - 7; q > 0 && q % 8 > 0; q = q - 7)
+                    {
+                        if(setQueenPrediction(squares[q],turn))
+                            break;
+                    }
+                    // q - right/down
+                    for(let q = i + 9; q < 64 && q % 8 > 0; q = q + 9)
+                    {
+                        if(setQueenPrediction(squares[q],turn))
+                            break;
+                    }
+                    // q - left/up
+                    for(let q = i - 9; q >= 0 && q % 8 < 7; q = q - 9)
+                    {
+                        if(setQueenPrediction(squares[q],turn))
+                            break;
+                    }
+                    // q - left/down
+                    for(let q = i + 7; q < 64 && q % 8 < 7; q = q + 7)
+                    {
+                        if(setQueenPrediction(squares[q],turn))
+                            break;
+                    }
+                    break;
+                }
+                default:
+                {
+                    isSelected = -1;
+                }
             }
         }
     }
