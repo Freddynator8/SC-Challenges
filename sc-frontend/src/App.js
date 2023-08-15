@@ -1,3 +1,5 @@
+import {useState} from "react";
+
 function Square({value, onSquareClicked}){
   return(
       <button className="square" onClick={onSquareClicked}>
@@ -97,5 +99,11 @@ function Board({squares}){
 }
 
 export default function Game(){
-
+const [squares, setSquare] = useState(Array(64).fill(0));
+const [isSelected, setSelected] = useState(0);
+return(
+    <div className="game">
+        <Board squares={squares} />
+    </div>
+)
 }
