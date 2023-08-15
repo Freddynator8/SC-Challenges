@@ -8,9 +8,37 @@ function Square({value, onSquareClicked}){
   );
 }
 
-function Board({squares}){
-  function handleSquareClicked(i){
+function Board({squares,isSelected}){
 
+  function handleSquareClicked(i){
+      if(isSelected !== -1)
+      {
+          //default = 0;
+          //dot = 1;
+          //knight b/w bA/wA = 2,3,4,5
+          //queen b/w bA/wA = 6,7,8,9
+
+          //Clicked on invalid field
+          if(i === isSelected || squares[i] === 0 || squares[i] === 2
+              || squares[i] === 3 || squares[i] === 6 || squares[i] === 7)
+          {
+              isSelected = -1;
+          }
+          //CLicked on valid field dot
+          else if(squares[i] === 1){
+              //TODO: Move Figure
+          }
+          //Clicked on valid field attack knight
+          else if (squares[i] === 4 || squares[i] === 5)
+          {
+              //TODO: Defeat Knight
+          }
+          //Clicked on valid field attack queen
+          else if (squares[i] === 8 || squares[i] === 9)
+          {
+              //TODO: Defeat Queen
+          }
+      }
   }
   return(
       <>
@@ -100,10 +128,10 @@ function Board({squares}){
 
 export default function Game(){
 const [squares, setSquare] = useState(Array(64).fill(0));
-const [isSelected, setSelected] = useState(0);
+const [isSelected, setSelected] = useState(-1);
 return(
     <div className="game">
-        <Board squares={squares} />
+        <Board squares={squares} isSelected={isSelected} />
     </div>
 )
 }
