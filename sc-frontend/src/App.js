@@ -1,8 +1,13 @@
 import {useState} from "react";
+import './App.css';
 
 const Turn = {
     white: 0,
     black: 1
+}
+const FieldColor = {
+    white: "white",
+    black: "black"
 }
 const FieldTypes = {
     default: 0,
@@ -17,15 +22,19 @@ const FieldTypes = {
     queenWhiteAttacked: 9,
 }
 
-function Square({value, onSquareClicked}){
+function Square({color, value, onSquareClicked}){
+    const divStyle = {
+        backgroundColor: color,
+        color: (color === FieldColor.white? FieldColor.black: FieldColor.white),
+    }
   return(
-      <button className="square" onClick={onSquareClicked}>
+      <div style={divStyle} className="square" onClick={onSquareClicked}>
         {value}
-      </button>
+      </div>
   );
 }
 
-function Board({squares,isSelected}){
+function Board({squares,isSelected, turn}){
 
     function removeDots(fields){
         for(let field = 0; field < fields.length; field++){
@@ -234,97 +243,105 @@ function Board({squares,isSelected}){
         }
     }
   return(
-      <>
-          <div className="board-row">
-              <Square value={parseCharacter(squares[0])} onSquareClicked={() => handleSquareClicked(0)}/>
-              <Square value={parseCharacter(squares[1])} onSquareClicked={() => handleSquareClicked(1)}/>
-              <Square value={parseCharacter(squares[2])} onSquareClicked={() => handleSquareClicked(2)}/>
-              <Square value={parseCharacter(squares[3])} onSquareClicked={() => handleSquareClicked(3)}/>
-              <Square value={parseCharacter(squares[4])} onSquareClicked={() => handleSquareClicked(4)}/>
-              <Square value={parseCharacter(squares[5])} onSquareClicked={() => handleSquareClicked(5)}/>
-              <Square value={parseCharacter(squares[6])} onSquareClicked={() => handleSquareClicked(6)}/>
-              <Square value={parseCharacter(squares[7])} onSquareClicked={() => handleSquareClicked(7)}/>
+      <div className="container">
+          <div className="game-container">
+              <div className="board-row">
+                  <Square color={FieldColor.white} value={parseCharacter(squares[0])} onSquareClicked={() => handleSquareClicked(0,turn)}/>
+                  <Square color={FieldColor.black} value={parseCharacter(squares[1])} onSquareClicked={() => handleSquareClicked(1,turn)}/>
+                  <Square color={FieldColor.white} value={parseCharacter(squares[2])} onSquareClicked={() => handleSquareClicked(2,turn)}/>
+                  <Square color={FieldColor.black} value={parseCharacter(squares[3])} onSquareClicked={() => handleSquareClicked(3,turn)}/>
+                  <Square color={FieldColor.white} value={parseCharacter(squares[4])} onSquareClicked={() => handleSquareClicked(4,turn)}/>
+                  <Square color={FieldColor.black} value={parseCharacter(squares[5])} onSquareClicked={() => handleSquareClicked(5,turn)}/>
+                  <Square color={FieldColor.white} value={parseCharacter(squares[6])} onSquareClicked={() => handleSquareClicked(6,turn)}/>
+                  <Square color={FieldColor.black} value={parseCharacter(squares[7])} onSquareClicked={() => handleSquareClicked(7,turn)}/>
+              </div>
+              <div className="board-row">
+                  <Square color={FieldColor.black} value={parseCharacter(squares[8])} onSquareClicked={() => handleSquareClicked(8,turn)}/>
+                  <Square color={FieldColor.white} value={parseCharacter(squares[9])} onSquareClicked={() => handleSquareClicked(9,turn)}/>
+                  <Square color={FieldColor.black} value={parseCharacter(squares[10])} onSquareClicked={() => handleSquareClicked(10,turn)}/>
+                  <Square color={FieldColor.white} value={parseCharacter(squares[11])} onSquareClicked={() => handleSquareClicked(11,turn)}/>
+                  <Square color={FieldColor.black} value={parseCharacter(squares[12])} onSquareClicked={() => handleSquareClicked(12,turn)}/>
+                  <Square color={FieldColor.white} value={parseCharacter(squares[13])} onSquareClicked={() => handleSquareClicked(13,turn)}/>
+                  <Square color={FieldColor.black} value={parseCharacter(squares[14])} onSquareClicked={() => handleSquareClicked(14,turn)}/>
+                  <Square color={FieldColor.white} value={parseCharacter(squares[15])} onSquareClicked={() => handleSquareClicked(15,turn)}/>
+              </div>
+              <div className="board-row">
+                  <Square color={FieldColor.white} value={parseCharacter(squares[16])} onSquareClicked={() => handleSquareClicked(16,turn)}/>
+                  <Square color={FieldColor.black} value={parseCharacter(squares[17])} onSquareClicked={() => handleSquareClicked(17,turn)}/>
+                  <Square color={FieldColor.white} value={parseCharacter(squares[18])} onSquareClicked={() => handleSquareClicked(18,turn)}/>
+                  <Square color={FieldColor.black} value={parseCharacter(squares[19])} onSquareClicked={() => handleSquareClicked(19,turn)}/>
+                  <Square color={FieldColor.white} value={parseCharacter(squares[20])} onSquareClicked={() => handleSquareClicked(20,turn)}/>
+                  <Square color={FieldColor.black} value={parseCharacter(squares[21])} onSquareClicked={() => handleSquareClicked(21,turn)}/>
+                  <Square color={FieldColor.white} value={parseCharacter(squares[22])} onSquareClicked={() => handleSquareClicked(22,turn)}/>
+                  <Square color={FieldColor.black} value={parseCharacter(squares[23])} onSquareClicked={() => handleSquareClicked(23,turn)}/>
+              </div>
+              <div className="board-row">
+                  <Square color={FieldColor.black} value={parseCharacter(squares[24])} onSquareClicked={() => handleSquareClicked(24,turn)}/>
+                  <Square color={FieldColor.white} value={parseCharacter(squares[25])} onSquareClicked={() => handleSquareClicked(25,turn)}/>
+                  <Square color={FieldColor.black} value={parseCharacter(squares[26])} onSquareClicked={() => handleSquareClicked(26,turn)}/>
+                  <Square color={FieldColor.white} value={parseCharacter(squares[27])} onSquareClicked={() => handleSquareClicked(27,turn)}/>
+                  <Square color={FieldColor.black} value={parseCharacter(squares[28])} onSquareClicked={() => handleSquareClicked(28,turn)}/>
+                  <Square color={FieldColor.white} value={parseCharacter(squares[29])} onSquareClicked={() => handleSquareClicked(29,turn)}/>
+                  <Square color={FieldColor.black} value={parseCharacter(squares[30])} onSquareClicked={() => handleSquareClicked(30,turn)}/>
+                  <Square color={FieldColor.white} value={parseCharacter(squares[31])} onSquareClicked={() => handleSquareClicked(31,turn)}/>
+              </div>
+              <div className="board-row">
+                  <Square color={FieldColor.white} value={parseCharacter(squares[32])} onSquareClicked={() => handleSquareClicked(32,turn)}/>
+                  <Square color={FieldColor.black} value={parseCharacter(squares[33])} onSquareClicked={() => handleSquareClicked(33,turn)}/>
+                  <Square color={FieldColor.white} value={parseCharacter(squares[34])} onSquareClicked={() => handleSquareClicked(34,turn)}/>
+                  <Square color={FieldColor.black} value={parseCharacter(squares[35])} onSquareClicked={() => handleSquareClicked(35,turn)}/>
+                  <Square color={FieldColor.white} value={parseCharacter(squares[36])} onSquareClicked={() => handleSquareClicked(36,turn)}/>
+                  <Square color={FieldColor.black} value={parseCharacter(squares[37])} onSquareClicked={() => handleSquareClicked(37,turn)}/>
+                  <Square color={FieldColor.white} value={parseCharacter(squares[38])} onSquareClicked={() => handleSquareClicked(38,turn)}/>
+                  <Square color={FieldColor.black} value={parseCharacter(squares[39])} onSquareClicked={() => handleSquareClicked(39,turn)}/>
+              </div>
+              <div className="board-row">
+                  <Square color={FieldColor.black} value={parseCharacter(squares[40])} onSquareClicked={() => handleSquareClicked(40,turn)}/>
+                  <Square color={FieldColor.white} value={parseCharacter(squares[41])} onSquareClicked={() => handleSquareClicked(41,turn)}/>
+                  <Square color={FieldColor.black} value={parseCharacter(squares[42])} onSquareClicked={() => handleSquareClicked(42,turn)}/>
+                  <Square color={FieldColor.white} value={parseCharacter(squares[43])} onSquareClicked={() => handleSquareClicked(43,turn)}/>
+                  <Square color={FieldColor.black} value={parseCharacter(squares[44])} onSquareClicked={() => handleSquareClicked(44,turn)}/>
+                  <Square color={FieldColor.white} value={parseCharacter(squares[45])} onSquareClicked={() => handleSquareClicked(45,turn)}/>
+                  <Square color={FieldColor.black} value={parseCharacter(squares[46])} onSquareClicked={() => handleSquareClicked(46,turn)}/>
+                  <Square color={FieldColor.white} value={parseCharacter(squares[47])} onSquareClicked={() => handleSquareClicked(47,turn)}/>
+              </div>
+              <div className="board-row">
+                  <Square color={FieldColor.white} value={parseCharacter(squares[48])} onSquareClicked={() => handleSquareClicked(48,turn)}/>
+                  <Square color={FieldColor.black} value={parseCharacter(squares[49])} onSquareClicked={() => handleSquareClicked(49,turn)}/>
+                  <Square color={FieldColor.white} value={parseCharacter(squares[50])} onSquareClicked={() => handleSquareClicked(50,turn)}/>
+                  <Square color={FieldColor.black} value={parseCharacter(squares[51])} onSquareClicked={() => handleSquareClicked(51,turn)}/>
+                  <Square color={FieldColor.white} value={parseCharacter(squares[52])} onSquareClicked={() => handleSquareClicked(52,turn)}/>
+                  <Square color={FieldColor.black} value={parseCharacter(squares[53])} onSquareClicked={() => handleSquareClicked(53,turn)}/>
+                  <Square color={FieldColor.white} value={parseCharacter(squares[54])} onSquareClicked={() => handleSquareClicked(54,turn)}/>
+                  <Square color={FieldColor.black} value={parseCharacter(squares[55])} onSquareClicked={() => handleSquareClicked(55,turn)}/>
+              </div>
+              <div className="board-row">
+                  <Square color={FieldColor.black} value={parseCharacter(squares[56])} onSquareClicked={() => handleSquareClicked(56,turn)}/>
+                  <Square color={FieldColor.white} value={parseCharacter(squares[57])} onSquareClicked={() => handleSquareClicked(57,turn)}/>
+                  <Square color={FieldColor.black} value={parseCharacter(squares[58])} onSquareClicked={() => handleSquareClicked(58,turn)}/>
+                  <Square color={FieldColor.white} value={parseCharacter(squares[59])} onSquareClicked={() => handleSquareClicked(59,turn)}/>
+                  <Square color={FieldColor.black} value={parseCharacter(squares[60])} onSquareClicked={() => handleSquareClicked(60,turn)}/>
+                  <Square color={FieldColor.white} value={parseCharacter(squares[61])} onSquareClicked={() => handleSquareClicked(61,turn)}/>
+                  <Square color={FieldColor.black} value={parseCharacter(squares[62])} onSquareClicked={() => handleSquareClicked(62,turn)}/>
+                  <Square color={FieldColor.white} value={parseCharacter(squares[63])} onSquareClicked={() => handleSquareClicked(63,turn)}/>
+              </div>
           </div>
-          <div className="board-row">
-              <Square value={parseCharacter(squares[8])} onSquareClicked={() => handleSquareClicked(8)}/>
-              <Square value={parseCharacter(squares[9])} onSquareClicked={() => handleSquareClicked(9)}/>
-              <Square value={parseCharacter(squares[10])} onSquareClicked={() => handleSquareClicked(10)}/>
-              <Square value={parseCharacter(squares[11])} onSquareClicked={() => handleSquareClicked(11)}/>
-              <Square value={parseCharacter(squares[12])} onSquareClicked={() => handleSquareClicked(12)}/>
-              <Square value={parseCharacter(squares[13])} onSquareClicked={() => handleSquareClicked(13)}/>
-              <Square value={parseCharacter(squares[14])} onSquareClicked={() => handleSquareClicked(14)}/>
-              <Square value={parseCharacter(squares[15])} onSquareClicked={() => handleSquareClicked(15)}/>
-          </div>
-          <div className="board-row">
-              <Square value={parseCharacter(squares[16])} onSquareClicked={() => handleSquareClicked(16)}/>
-              <Square value={parseCharacter(squares[17])} onSquareClicked={() => handleSquareClicked(17)}/>
-              <Square value={parseCharacter(squares[18])} onSquareClicked={() => handleSquareClicked(18)}/>
-              <Square value={parseCharacter(squares[19])} onSquareClicked={() => handleSquareClicked(19)}/>
-              <Square value={parseCharacter(squares[20])} onSquareClicked={() => handleSquareClicked(20)}/>
-              <Square value={parseCharacter(squares[21])} onSquareClicked={() => handleSquareClicked(21)}/>
-              <Square value={parseCharacter(squares[22])} onSquareClicked={() => handleSquareClicked(22)}/>
-              <Square value={parseCharacter(squares[23])} onSquareClicked={() => handleSquareClicked(23)}/>
-          </div>
-          <div className="board-row">
-              <Square value={parseCharacter(squares[24])} onSquareClicked={() => handleSquareClicked(24)}/>
-              <Square value={parseCharacter(squares[25])} onSquareClicked={() => handleSquareClicked(25)}/>
-              <Square value={parseCharacter(squares[26])} onSquareClicked={() => handleSquareClicked(26)}/>
-              <Square value={parseCharacter(squares[27])} onSquareClicked={() => handleSquareClicked(27)}/>
-              <Square value={parseCharacter(squares[28])} onSquareClicked={() => handleSquareClicked(28)}/>
-              <Square value={parseCharacter(squares[29])} onSquareClicked={() => handleSquareClicked(29)}/>
-              <Square value={parseCharacter(squares[30])} onSquareClicked={() => handleSquareClicked(30)}/>
-              <Square value={parseCharacter(squares[31])} onSquareClicked={() => handleSquareClicked(31)}/>
-          </div>
-          <div className="board-row">
-              <Square value={parseCharacter(squares[32])} onSquareClicked={() => handleSquareClicked(32)}/>
-              <Square value={parseCharacter(squares[33])} onSquareClicked={() => handleSquareClicked(33)}/>
-              <Square value={parseCharacter(squares[34])} onSquareClicked={() => handleSquareClicked(34)}/>
-              <Square value={parseCharacter(squares[35])} onSquareClicked={() => handleSquareClicked(35)}/>
-              <Square value={parseCharacter(squares[36])} onSquareClicked={() => handleSquareClicked(36)}/>
-              <Square value={parseCharacter(squares[37])} onSquareClicked={() => handleSquareClicked(37)}/>
-              <Square value={parseCharacter(squares[38])} onSquareClicked={() => handleSquareClicked(38)}/>
-              <Square value={parseCharacter(squares[39])} onSquareClicked={() => handleSquareClicked(39)}/>
-          </div>
-          <div className="board-row">
-              <Square value={parseCharacter(squares[40])} onSquareClicked={() => handleSquareClicked(40)}/>
-              <Square value={parseCharacter(squares[41])} onSquareClicked={() => handleSquareClicked(41)}/>
-              <Square value={parseCharacter(squares[42])} onSquareClicked={() => handleSquareClicked(42)}/>
-              <Square value={parseCharacter(squares[43])} onSquareClicked={() => handleSquareClicked(43)}/>
-              <Square value={parseCharacter(squares[44])} onSquareClicked={() => handleSquareClicked(44)}/>
-              <Square value={parseCharacter(squares[45])} onSquareClicked={() => handleSquareClicked(45)}/>
-              <Square value={parseCharacter(squares[46])} onSquareClicked={() => handleSquareClicked(46)}/>
-              <Square value={parseCharacter(squares[47])} onSquareClicked={() => handleSquareClicked(47)}/>
-          </div>
-          <div className="board-row">
-              <Square value={parseCharacter(squares[48])} onSquareClicked={() => handleSquareClicked(48)}/>
-              <Square value={parseCharacter(squares[49])} onSquareClicked={() => handleSquareClicked(49)}/>
-              <Square value={parseCharacter(squares[50])} onSquareClicked={() => handleSquareClicked(50)}/>
-              <Square value={parseCharacter(squares[51])} onSquareClicked={() => handleSquareClicked(51)}/>
-              <Square value={parseCharacter(squares[52])} onSquareClicked={() => handleSquareClicked(52)}/>
-              <Square value={parseCharacter(squares[53])} onSquareClicked={() => handleSquareClicked(53)}/>
-              <Square value={parseCharacter(squares[54])} onSquareClicked={() => handleSquareClicked(54)}/>
-              <Square value={parseCharacter(squares[55])} onSquareClicked={() => handleSquareClicked(55)}/>
-          </div>
-          <div className="board-row">
-              <Square value={parseCharacter(squares[56])} onSquareClicked={() => handleSquareClicked(56)}/>
-              <Square value={parseCharacter(squares[57])} onSquareClicked={() => handleSquareClicked(57)}/>
-              <Square value={parseCharacter(squares[58])} onSquareClicked={() => handleSquareClicked(58)}/>
-              <Square value={parseCharacter(squares[59])} onSquareClicked={() => handleSquareClicked(59)}/>
-              <Square value={parseCharacter(squares[60])} onSquareClicked={() => handleSquareClicked(60)}/>
-              <Square value={parseCharacter(squares[61])} onSquareClicked={() => handleSquareClicked(61)}/>
-              <Square value={parseCharacter(squares[62])} onSquareClicked={() => handleSquareClicked(62)}/>
-              <Square value={parseCharacter(squares[63])} onSquareClicked={() => handleSquareClicked(63)}/>
-          </div>
-      </>
+      </div>
   )
 }
 
 export default function Game(){
-const [squares, setSquare] = useState(Array(64).fill(0));
-const [isSelected, setSelected] = useState(-1);
+let squares = Array(64).fill(0);
+let isSelected = -1;
+let turn = Turn.white;
+squares[14] = FieldTypes.knightBlack;
+squares[9] = FieldTypes.queenBlack;
+squares[53] = FieldTypes.knightWhite;
+squares[50] = FieldTypes.queenWhite;
+
 return(
     <div className="game">
-        <Board squares={squares} isSelected={isSelected} />
+        <Board squares={squares} isSelected={isSelected} turn={turn} />
     </div>
 )
 }
