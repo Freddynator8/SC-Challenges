@@ -1,5 +1,5 @@
-import {useState} from "react";
 import './App.css';
+import {useState} from "react";
 
 const Turn = {
     white: 0,
@@ -34,65 +34,66 @@ function Square({color, value, onSquareClicked}){
   );
 }
 
-function Board({squares,isSelected, turn}){
+function Board({squares,isSelected, turn, onPlay}){
 
-    function removeDots(fields){
-        for(let field = 0; field < fields.length; field++){
-            if(fields[field] === FieldTypes.dot)
+    function removeDots(){
+        for(let i = 0; i < squares.length; i++){
+            if(squares[i] === FieldTypes.dot)
             {
-                fields[field] = FieldTypes.default;
+                onPlay(1,FieldTypes.default);
             }
         }
-        return fields;
     }
-    function setPrediction(square, turn) {
+    function setPrediction(i, turn) {
+        console.log("setPrediction",i);
         if (turn === Turn.white
-            ? square !== FieldTypes.knightWhite && square !== FieldTypes.queenWhite
-            : square !== FieldTypes.knightBlack && square !== FieldTypes.queenBlack) {
-            switch (square) {
+            ? squares[i] !== FieldTypes.knightWhite && squares[i] !== FieldTypes.queenWhite
+            : squares[i] !== FieldTypes.knightBlack && squares[i] !== FieldTypes.queenBlack) {
+            switch (squares[i]) {
                 case FieldTypes.knightBlack:
                 {
-                    square = FieldTypes.knightBlackAttacked;
+                    onPlay(i,FieldTypes.knightBlackAttacked);
                     break;
                 }
                 case FieldTypes.knightWhite:
                 {
-                    square = FieldTypes.knightWhiteAttacked;
+                    onPlay(i,FieldTypes.knightWhiteAttacked);
                     break;
                 }
                 case FieldTypes.queenBlack:
                 {
-                    square = FieldTypes.queenBlackAttacked;
+                    onPlay(i,FieldTypes.queenBlackAttacked);
                     break;
                 }
                 case FieldTypes.queenWhite:
                 {
-                    square = FieldTypes.queenWhiteAttacked;
+                    onPlay(i,FieldTypes.queenWhiteAttacked);
                     break;
                 }
                 default:
-                    square = FieldTypes.dot;
+                    onPlay(i,FieldTypes.dot);
             }
         }
     }
-    function setQueenPrediction(square,turn){
+    function setQueenPrediction(i,turn){
         if(turn === Turn.white)
         {
-            if(square === FieldTypes.queenWhite || square === FieldTypes.knightWhite)
+            if(squares[i] === FieldTypes.queenWhite || squares[i] === FieldTypes.knightWhite)
                 return true;
-            setPrediction(square, turn);
-            if(square === FieldTypes.queenBlack || square === FieldTypes.knightBlack)
+            setPrediction(i, turn);
+            if(squares === FieldTypes.queenBlack || squares[i] === FieldTypes.knightBlack)
                 return true;
         }
         else {
-            if(square === FieldTypes.queenBlack || square === FieldTypes.knightBlack)
+            if(squares[i] === FieldTypes.queenBlack || squares[i] === FieldTypes.knightBlack)
                 return true;
-            setPrediction(square, turn);
-            if(square === FieldTypes.queenWhite || square === FieldTypes.knightWhite)
+            setPrediction(i, turn);
+            if(squares[i] === FieldTypes.queenWhite || squares[i] === FieldTypes.knightWhite)
                 return true;
         }
     }
     function handleSquareClicked(i,turn){
+        console.log("hSC",i,squares);
         if(isSelected !== -1)
         {
             //Clicked on invalid field
@@ -100,13 +101,14 @@ function Board({squares,isSelected, turn}){
                 || squares[i] === FieldTypes.knightWhite || squares[i] === FieldTypes.queenBlack
                 || squares[i] === FieldTypes.queenWhite)
             {
+                removeDots();
                 isSelected = -1;
             }
             //Clicked on valid field dot
             else{
-                squares = removeDots(squares);
-                squares[i] = squares[isSelected];
-                squares[isSelected] = FieldTypes.default;
+                removeDots();
+                onPlay(i,squares[isSelected])
+                onPlay(isSelected,FieldTypes.default);
                 isSelected = -1;
             }
         }
@@ -120,9 +122,9 @@ function Board({squares,isSelected, turn}){
                     // k
                     if(i-16 >= 0){
                         if(i % 8 !== 7 )
-                            setPrediction(squares[i-15], turn);
+                            setPrediction(i-15, turn);
                         if(i % 8 !== 0)
-                            setPrediction(squares[i-17], turn);
+                            setPrediction(i-17, turn);
                     }
 
                     // k
@@ -130,9 +132,9 @@ function Board({squares,isSelected, turn}){
                     //***
                     if(i+16 <= 63){
                         if(i % 8 !== 7)
-                            setPrediction(squares[i+17], turn);
+                            setPrediction(i+17, turn);
                         if(i % 8 !== 0)
-                            setPrediction(squares[i+15], turn);
+                            setPrediction(i+15, turn);
                     }
 
                     //    *
@@ -140,9 +142,9 @@ function Board({squares,isSelected, turn}){
                     //    *
                     if(i % 8 < 6){
                         if(i-8 > 0 )
-                            setPrediction(squares[i-6], turn);
+                            setPrediction(i-6, turn);
                         if(i+8 < 63)
-                            setPrediction(squares[i+10], turn);
+                            setPrediction(i+10, turn);
                     }
 
                     //*
@@ -150,9 +152,9 @@ function Board({squares,isSelected, turn}){
                     //*
                     if(i % 8 > 1){
                         if(i-8 > 0 )
-                            setPrediction(squares[i-10], turn);
+                            setPrediction(i-10, turn);
                         if(i+8 < 63)
-                            setPrediction(squares[i+6], turn);
+                            setPrediction(i+6, turn);
                     }
                     break;
                 }
@@ -161,52 +163,52 @@ function Board({squares,isSelected, turn}){
                     // q - right
                     for(let q = i + 1; q % 8 > 0 && q < 64; q++)
                     {
-                        if(setQueenPrediction(squares[q],turn))
+                        if(setQueenPrediction(q,turn))
                             break;
                     }
 
                     // q - left
                     for(let q = i-1; q % 8 < 7 && q >= 0; q--)
                     {
-                        if(setQueenPrediction(squares[q],turn))
+                        if(setQueenPrediction(q,turn))
                             break;
                     }
 
                     // q - up
                     for(let q = i - 8; q >= 0; q = q - 8)
                     {
-                        if(setQueenPrediction(squares[q],turn))
+                        if(setQueenPrediction(q,turn))
                             break;
                     }
 
                     // q - down
                     for(let q = i + 8; q < 64; q = q + 8)
                     {
-                        if(setQueenPrediction(squares[q],turn))
+                        if(setQueenPrediction(q,turn))
                             break;
                     }
                     // q - right/up
                     for(let q = i - 7; q > 0 && q % 8 > 0; q = q - 7)
                     {
-                        if(setQueenPrediction(squares[q],turn))
+                        if(setQueenPrediction(q,turn))
                             break;
                     }
                     // q - right/down
                     for(let q = i + 9; q < 64 && q % 8 > 0; q = q + 9)
                     {
-                        if(setQueenPrediction(squares[q],turn))
+                        if(setQueenPrediction(q,turn))
                             break;
                     }
                     // q - left/up
                     for(let q = i - 9; q >= 0 && q % 8 < 7; q = q - 9)
                     {
-                        if(setQueenPrediction(squares[q],turn))
+                        if(setQueenPrediction(q,turn))
                             break;
                     }
                     // q - left/down
                     for(let q = i + 7; q < 64 && q % 8 < 7; q = q + 7)
                     {
-                        if(setQueenPrediction(squares[q],turn))
+                        if(setQueenPrediction(q,turn))
                             break;
                     }
                     break;
@@ -219,6 +221,7 @@ function Board({squares,isSelected, turn}){
         }
     }
     function parseCharacter(square){
+        console.log("parse");
         switch (square){
             case FieldTypes.dot:
                 return "X";
@@ -331,7 +334,7 @@ function Board({squares,isSelected, turn}){
 }
 
 export default function Game(){
-let squares = Array(64).fill(0);
+const [squares, setSquares] = useState(Array(64).fill(0));
 let isSelected = -1;
 let turn = Turn.white;
 squares[14] = FieldTypes.knightBlack;
@@ -339,9 +342,17 @@ squares[9] = FieldTypes.queenBlack;
 squares[53] = FieldTypes.knightWhite;
 squares[50] = FieldTypes.queenWhite;
 
+function changeField(index,value){
+    console.log("cF1", index,squares);
+    squares[index] = value;
+    console.log("cF2",squares);
+    setSquares(squares);
+    console.log("cF3",squares);
+}
+
 return(
     <div className="game">
-        <Board squares={squares} isSelected={isSelected} turn={turn} />
+        <Board squares={squares} isSelected={isSelected} turn={turn} onPlay={changeField} />
     </div>
 )
 }
