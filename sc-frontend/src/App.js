@@ -34,58 +34,58 @@ function Square({color, value, onSquareClicked}){
   );
 }
 
-function Board({squares,isSelected, turn, onPlay}){
+function Board({squares,isSelected, turn, onPlay, onIsSelected, onChangeTurn}){
 
     function removeDots(){
         for(let i = 0; i < squares.length; i++){
             if(squares[i] === FieldTypes.dot)
             {
-                onPlay(1,FieldTypes.default);
+                squares[i] = FieldTypes.default;
             }
         }
     }
     function setPrediction(i, turn) {
-        console.log("setPrediction",i);
-
         if (turn === Turn.white
             ? squares[i] !== FieldTypes.knightWhite && squares[i] !== FieldTypes.queenWhite
             : squares[i] !== FieldTypes.knightBlack && squares[i] !== FieldTypes.queenBlack) {
             switch (squares[i]) {
                 case FieldTypes.knightBlack:
                 {
-                    onPlay(i,FieldTypes.knightBlackAttacked);
+                    squares[i] = FieldTypes.knightBlackAttacked;
                     break;
                 }
                 case FieldTypes.knightWhite:
                 {
-                    onPlay(i,FieldTypes.knightWhiteAttacked);
+                    squares[i] = FieldTypes.knightWhiteAttacked;
                     break;
                 }
                 case FieldTypes.queenBlack:
                 {
-                    onPlay(i,FieldTypes.queenBlackAttacked);
+                    squares[i] = FieldTypes.queenBlackAttacked;
                     break;
                 }
                 case FieldTypes.queenWhite:
                 {
-                    onPlay(i,FieldTypes.queenWhiteAttacked);
+                    squares[i] = FieldTypes.queenWhiteAttacked;
                     break;
                 }
                 default:
-                    onPlay(i,FieldTypes.dot);
+                    squares[i] = FieldTypes.dot;
             }
         }
     }
     function setQueenPrediction(i,turn){
         if(turn === Turn.white)
         {
+            console.log(turn,Turn.white,squares[i],FieldTypes.knightWhite);
             if(squares[i] === FieldTypes.queenWhite || squares[i] === FieldTypes.knightWhite)
                 return true;
             setPrediction(i, turn);
-            if(squares === FieldTypes.queenBlack || squares[i] === FieldTypes.knightBlack)
+            if(squares[i] === FieldTypes.queenBlack || squares[i] === FieldTypes.knightBlack)
                 return true;
         }
         else {
+            console.log(turn,Turn.black,squares[i],FieldTypes.knightBlack);
             if(squares[i] === FieldTypes.queenBlack || squares[i] === FieldTypes.knightBlack)
                 return true;
             setPrediction(i, turn);
@@ -94,7 +94,7 @@ function Board({squares,isSelected, turn, onPlay}){
         }
     }
     function handleSquareClicked(i,turn){
-        console.log("hSC",i,squares);
+        console.log(isSelected,i);
         if(isSelected !== -1)
         {
             //Clicked on invalid field
@@ -103,126 +103,128 @@ function Board({squares,isSelected, turn, onPlay}){
                 || squares[i] === FieldTypes.queenWhite)
             {
                 removeDots();
-                isSelected = -1;
+                onPlay(squares);
+                onIsSelected(-1);
             }
             //Clicked on valid field dot
             else{
                 removeDots();
-                onPlay(i,squares[isSelected])
-                onPlay(isSelected,FieldTypes.default);
-                isSelected = -1;
+                squares[i] = squares[isSelected];
+                squares[isSelected] = FieldTypes.default;
+                onPlay(squares);
+                onIsSelected(-1);
+                onChangeTurn(turn);
             }
         }
-        else {
-            isSelected = i;
-            switch (squares[i]){
-                case FieldTypes.knightBlack || FieldTypes.knightWhite:
-                {
-                    //***
-                    // *
-                    // k
-                    if(i-16 >= 0){
-                        if(i % 8 !== 7 )
-                            setPrediction(i-15, turn);
-                        if(i % 8 !== 0)
-                            setPrediction(i-17, turn);
-                    }
-
-                    // k
-                    // *
-                    //***
-                    if(i+16 <= 63){
-                        if(i % 8 !== 7)
-                            setPrediction(i+17, turn);
-                        if(i % 8 !== 0)
-                            setPrediction(i+15, turn);
-                    }
-
-                    //    *
-                    //k * *
-                    //    *
-                    if(i % 8 < 6){
-                        if(i-8 > 0 )
-                            setPrediction(i-6, turn);
-                        if(i+8 < 63)
-                            setPrediction(i+10, turn);
-                    }
-
-                    //*
-                    //* * k
-                    //*
-                    if(i % 8 > 1){
-                        if(i-8 > 0 )
-                            setPrediction(i-10, turn);
-                        if(i+8 < 63)
-                            setPrediction(i+6, turn);
-                    }
-                    break;
+        else if(((squares[i] === FieldTypes.knightWhite || squares[i] === FieldTypes.queenWhite) && turn === Turn.white)
+            ||((squares[i] === FieldTypes.knightBlack|| squares[i] === FieldTypes.queenBlack) && turn === Turn.black))
+        {
+            onIsSelected(i);
+            if(squares[i] === FieldTypes.knightWhite || squares[i] === FieldTypes.knightBlack)
+            {
+                //***
+                // *
+                // k
+                if(i-16 >= 0){
+                    if(i % 8 !== 7 )
+                        setPrediction(i-15, turn);
+                    if(i % 8 !== 0)
+                        setPrediction(i-17, turn);
                 }
-                case (FieldTypes.queenBlack || FieldTypes.queenWhite):
-                {
-                    // q - right
-                    for(let q = i + 1; q % 8 > 0 && q < 64; q++)
-                    {
-                        if(setQueenPrediction(q,turn))
-                            break;
-                    }
 
-                    // q - left
-                    for(let q = i-1; q % 8 < 7 && q >= 0; q--)
-                    {
-                        if(setQueenPrediction(q,turn))
-                            break;
-                    }
-
-                    // q - up
-                    for(let q = i - 8; q >= 0; q = q - 8)
-                    {
-                        if(setQueenPrediction(q,turn))
-                            break;
-                    }
-
-                    // q - down
-                    for(let q = i + 8; q < 64; q = q + 8)
-                    {
-                        if(setQueenPrediction(q,turn))
-                            break;
-                    }
-                    // q - right/up
-                    for(let q = i - 7; q > 0 && q % 8 > 0; q = q - 7)
-                    {
-                        if(setQueenPrediction(q,turn))
-                            break;
-                    }
-                    // q - right/down
-                    for(let q = i + 9; q < 64 && q % 8 > 0; q = q + 9)
-                    {
-                        if(setQueenPrediction(q,turn))
-                            break;
-                    }
-                    // q - left/up
-                    for(let q = i - 9; q >= 0 && q % 8 < 7; q = q - 9)
-                    {
-                        if(setQueenPrediction(q,turn))
-                            break;
-                    }
-                    // q - left/down
-                    for(let q = i + 7; q < 64 && q % 8 < 7; q = q + 7)
-                    {
-                        if(setQueenPrediction(q,turn))
-                            break;
-                    }
-                    break;
+                // k
+                // *
+                //***
+                if(i+16 <= 63){
+                    if(i % 8 !== 7)
+                        setPrediction(i+17, turn);
+                    if(i % 8 !== 0)
+                        setPrediction(i+15, turn);
                 }
-                default:
-                {
-                    isSelected = -1;
+
+                //    *
+                //k * *
+                //    *
+                if(i % 8 < 6){
+                    if(i-8 > 0 )
+                        setPrediction(i-6, turn);
+                    if(i+8 < 63)
+                        setPrediction(i+10, turn);
                 }
+
+                //*
+                //* * k
+                //*
+                if(i % 8 > 1){
+                    if(i-8 > 0 )
+                        setPrediction(i-10, turn);
+                    if(i+8 < 63)
+                        setPrediction(i+6, turn);
+                }
+                onPlay(squares);
+            }
+            else if(squares[i] === FieldTypes.queenBlack || squares[i] === FieldTypes.queenWhite)
+            {
+                // q - right
+                for(let q = i + 1; q % 8 > 0 && q < 64; q++)
+                {
+                    if(setQueenPrediction(q,turn))
+                        break;
+                }
+
+                // q - left
+                for(let q = i-1; q % 8 < 7 && q >= 0; q--)
+                {
+                    if(setQueenPrediction(q,turn))
+                        break;
+                }
+
+                // q - up
+                for(let q = i - 8; q >= 0; q = q - 8)
+                {
+                    if(setQueenPrediction(q,turn))
+                        break;
+                }
+
+                // q - down
+                for(let q = i + 8; q < 64; q = q + 8)
+                {
+                    if(setQueenPrediction(q,turn))
+                        break;
+                }
+                // q - right/up
+                for(let q = i - 7; q > 0 && q % 8 > 0; q = q - 7)
+                {
+                    if(setQueenPrediction(q,turn))
+                        break;
+                }
+                // q - right/down
+                for(let q = i + 9; q < 64 && q % 8 > 0; q = q + 9)
+                {
+                    if(setQueenPrediction(q,turn))
+                        break;
+                }
+                // q - left/up
+                for(let q = i - 9; q >= 0 && q % 8 < 7; q = q - 9)
+                {
+                    if(setQueenPrediction(q,turn))
+                        break;
+                }
+                // q - left/down
+                for(let q = i + 7; q < 64 && q % 8 < 7; q = q + 7)
+                {
+                    if(setQueenPrediction(q,turn))
+                        break;
+                }
+                onPlay(squares);
+            }
+            else
+            {
+                onIsSelected(-1);
             }
         }
     }
     function parseCharacter(square){
-        console.log("parse");
         switch (square){
             case FieldTypes.dot:
                 return "X";
@@ -333,24 +335,38 @@ function Board({squares,isSelected, turn, onPlay}){
 }
 
 export default function Game(){
-const [squares, setSquares] = useState(Array(64).fill(0));
+function initField()
+{
+    const start = Array(64).fill(0);
+    start[14] = FieldTypes.knightBlack;
+    start[9] = FieldTypes.queenBlack;
+    start[53] = FieldTypes.knightWhite;
+    start[50] = FieldTypes.queenWhite;
+    return start.slice();
+}
+const [fields, setFields] = useState(initField());
 const [isSelected, setSelected] = useState(-1)
 const [turn,setTurn] = useState(Turn.white);
-squares[14] = FieldTypes.knightBlack;
-squares[9] = FieldTypes.queenBlack;
-squares[53] = FieldTypes.knightWhite;
-squares[50] = FieldTypes.queenWhite;
 
-function changeField(index,value){
-    console.log("change",index,value);
-    const updateSquares = squares.slice();
-    updateSquares[index] = value;
-    setSquares(updateSquares);
+function changeSquares(f){
+    const updateSquares = f.slice();
+    setFields(updateSquares);
+}
+
+function changeIsSelected(isSel){
+    setSelected(isSel);
+}
+function changeTurn(t){
+    if(t === Turn.black)
+        setTurn(Turn.white);
+    else
+        setTurn(Turn.black);
+
 }
 
 return(
     <div className="container">
-        <Board squares={squares} isSelected={isSelected} turn={turn} onPlay={changeField} />
+        <Board squares={fields} isSelected={isSelected} turn={turn} onPlay={changeSquares} onIsSelected={changeIsSelected} onChangeTurn={changeTurn} />
     </div>
 )
 }
