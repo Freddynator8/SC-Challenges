@@ -356,7 +356,24 @@ function changeSquares(f){
 function changeIsSelected(isSel){
     setSelected(isSel);
 }
+function checkForWin(){
+    let queens = 0;
+    for(let i = 0; i < fields.length;i++)
+    {
+        if(fields[i] === FieldTypes.queenWhite)
+            queens += 2;
+        if(fields[i] === FieldTypes.queenBlack)
+            queens += 3;
+        if(queens === 5)
+            break;
+    }
+    if(queens === 2)
+        console.log("White won the Game!");
+    else if(queens === 3)
+        console.log("Black won the Game!");
+}
 function changeTurn(t){
+    checkForWin();
     if(t === Turn.black)
         setTurn(Turn.white);
     else
