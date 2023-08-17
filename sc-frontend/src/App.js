@@ -81,7 +81,7 @@ function Board({squares,isSelected, turn, onPlay, onIsSelected, onChangeTurn}){
             if(squares[i] === FieldTypes.queenWhite || squares[i] === FieldTypes.knightWhite)
                 return true;
             setPrediction(i, turn);
-            if(squares[i] === FieldTypes.queenBlack || squares[i] === FieldTypes.knightBlack)
+            if(squares[i] === FieldTypes.queenBlackAttacked || squares[i] === FieldTypes.knightBlackAttacked)
                 return true;
         }
         else {
@@ -89,7 +89,7 @@ function Board({squares,isSelected, turn, onPlay, onIsSelected, onChangeTurn}){
             if(squares[i] === FieldTypes.queenBlack || squares[i] === FieldTypes.knightBlack)
                 return true;
             setPrediction(i, turn);
-            if(squares[i] === FieldTypes.queenWhite || squares[i] === FieldTypes.knightWhite)
+            if(squares[i] === FieldTypes.queenWhiteAttacked || squares[i] === FieldTypes.knightWhiteAttacked)
                 return true;
         }
     }
