@@ -1,5 +1,8 @@
 
 /* ##### Generall Container */
+body{
+    margin: 0;
+}
 .container{
     height: 100vh;
     width: 100vw;
@@ -17,7 +20,7 @@
 }
 .main-container{
     height: 100%;
-    width: 100%;
+    width: calc(100% - 225px);
 
     background: #EAE5E5;
 }
@@ -27,8 +30,10 @@
 
     display: flex;
     flex-direction: row;
-    justify-content: center;
-    align-content:center;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    gap: 390px;
 }
 .content-container{
     width: 100%;
@@ -37,6 +42,48 @@
     flex-direction: row;
     justify-content: flex-start;
     align-content:center;
+}
+/* ##### Header Bar*/
+.header-title{
+    height: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 10px;
+}
+.header-title-text{
+
+    display: flex;
+    justify-content: center;
+    align-content:center;
+
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 50px;
+    line-height: 61px;
+
+    color: #6B6B6B;
+}
+.header-subtitle-text{
+    display: flex;
+    justify-content: center;
+    align-content:center;
+
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 21px;
+
+    color: #6B6B6B;
+}
+.header-graphic{
+    height: 90px;
+    width: 112px;
+    background: url(header-user.svg);
+    background-blend-mode: darken;
 }
 /* ##### Project Card */
 
