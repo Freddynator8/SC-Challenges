@@ -13,7 +13,7 @@ body{
     justify-content: flex-start;
     align-content: flex-start;
 }
-.menu-container{
+.sidebar-menu-container{
     height: 100%;
     width: 225px;
 
@@ -58,6 +58,29 @@ body{
     padding: 10px;
     gap: 15px;
     overflow-y: scroll;
+}
+.bottom-menu-container{
+    height: 60px;
+    width: 100%;
+    display: none;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 8px 15px;
+}
+/* ##### Bottom Menu */
+.bottom-menu-option{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 4px 10px;
+
+    border: 1px solid #203D89;
+    border-radius: 26px;
+}
+.bottom-menu-option-graphic{
+    width: 36px;
+    height: 36px;
 }
 /* ##### Side Menu */
 .menu-content{
@@ -269,4 +292,23 @@ body{
 }
 .pc-info-gap{
     width: 30%;
+}
+
+/* Smartphone CSS */
+@media (max-width: 768px) {
+.sidebar-menu-container{
+    display: none;
+}
+.container{
+    min-width: 100%;
+}
+.main-container{
+    width: 100%;
+}
+.header-container{
+    gap:10px;
+}
+.bottom-menu-container{
+    display: flex;
+}
 }
