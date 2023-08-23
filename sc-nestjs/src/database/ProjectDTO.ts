@@ -16,7 +16,4 @@ export class ProjectDTO {
   @IsString()
   @IsNotEmpty()
   createdDate: string;
-
-  @IsArray()
-  tasks: TaskEntity[];
 }
