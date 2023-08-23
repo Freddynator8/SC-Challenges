@@ -1,5 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
-import { TaskEntity } from './TaskEntity';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class ProjectEntity {
@@ -14,7 +13,4 @@ export class ProjectEntity {
 
   @Column()
   createdDate: string;
-
-  @OneToMany((type) => TaskEntity, (task) => task.pid)
-  tasks: TaskEntity[];
 }

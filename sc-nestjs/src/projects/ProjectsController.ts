@@ -55,8 +55,12 @@ export class ProjectsController {
 
   @UseGuards(LocalAuthGuard)
   @Put(':pid/tasks/:tid')
-  async updateTask(@Param('pid') pid: any, @Param('tid') tid: any) {
-    return this.projectsService.updateTask(pid, tid);
+  async updateTask(
+    @Param('pid') pid: any,
+    @Param('tid') tid: any,
+    @Body() task: TaskDTO,
+  ) {
+    return this.projectsService.updateTask(pid, tid, task);
   }
 
   @UseGuards(LocalAuthGuard)

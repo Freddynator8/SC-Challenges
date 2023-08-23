@@ -14,29 +14,55 @@ export class ProjectsService {
     private tasksRepository: Repository<TaskEntity>,
   ) {}
   async getAllProjects(): Promise<any> {
-    return null;
+    return this.projectsRepository.find();
   }
 
-  async createNewProject(body: any): Promise<any> {
-    return null;
+  async createNewProject(project: ProjectDTO): Promise<any> {
+    const newProject = await this.projectsRepository.create({
+      name: project.name,
+      description: project.description,
+      createdDate: project.createdDate,
+    });
+    await this.projectsRepository.save(newProject);
+    return newProject;
   }
 
   async updateProject(pid: number, project: ProjectDTO): Promise<any> {
-    return null;
+    const projectEntity = new ProjectEntity();
+    projectEntity.id = project.id;
+    projectEntity.name = project.name;
+    projectEntity.description = project.description;
+    projectEntity.createdDate = project.createdDate;
+    await this.projectsRepository.update(pid, projectEntity);
+    return true;
   }
   async deleteProject(pid: number): Promise<any> {
-    return null;
+    return this.projectsRepository.delete(pid);
   }
   async getAllTasks(pid: number): Promise<any> {
-    return null;
+    return this.tasksRepository.find({ where: { pid: pid } });
   }
   async createNewTask(pid: number, task: TaskDTO): Promise<any> {
-    return null;
+    const newTask = await this.tasksRepository.create({
+      pid: pid,
+      name: task.name,
+      description: task.description,
+      createdDate: task.createdDate,
+    });
+    await this.tasksRepository.save(newTask);
+    return newTask;
   }
-  async updateTask(pid: number, tid: number): Promise<any> {
-    return null;
+  async updateTask(pid: number, tid: number, task: TaskDTO): Promise<any> {
+    const taskEntity = new TaskEntity();
+    taskEntity.id = task.id;
+    taskEntity.pid = pid;
+    taskEntity.name = task.name;
+    taskEntity.description = task.description;
+    taskEntity.createdDate = task.createdDate;
+    await this.projectsRepository.update(tid, taskEntity);
+    return taskEntity;
   }
   async deleteTask(pid: number, tid: number): Promise<any> {
-    return null;
+    return this.projectsRepository.delete(tid);
   }
 }

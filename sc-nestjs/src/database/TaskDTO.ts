@@ -2,11 +2,7 @@ import { IsInt, IsNotEmpty, IsString } from 'class-validator';
 
 export class TaskDTO {
   @IsInt()
-  id: string;
-
-  @IsInt()
-  @IsNotEmpty()
-  pid: string;
+  id: number;
 
   @IsString()
   @IsNotEmpty()

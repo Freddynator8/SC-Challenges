@@ -3,7 +3,7 @@ import { TaskEntity } from './TaskEntity';
 
 export class ProjectDTO {
   @IsInt()
-  id: string;
+  id: number;
 
   @IsString()
   @IsNotEmpty()
@@ -18,5 +18,5 @@ export class ProjectDTO {
   createdDate: string;
 
   @IsArray()
-  task: TaskEntity[];
+  tasks: TaskEntity[];
 }
