@@ -74,6 +74,12 @@ body{
     justify-content: center;
     align-items: center;
     padding: 4px 10px;
+}
+.bottom-menu-option-selected{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 4px 10px;
 
     border: 1px solid #203D89;
     border-radius: 26px;

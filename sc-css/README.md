@@ -1,0 +1,5 @@
+## Running the HTML
+Doppelclick auf das challenge.html file.
+
+## Ablauf
+Gearbeitet wurde beim Erstelle mit VisualStudio Code. Dabei wurden html und css ohne plugin hilfen geschrieben. Das Figma File als Vorlage wurde das project in verschiedene Teile eingeteilt - SideMenu, BottomMenu, Header, Content. Nacheinander wurden diese Tasks abgearbeitet. Die Farben und Schriftarten wurden aus dem Figma-File entnommen. Selbes gilt auch für die fixe Größen von SideMenu, BottomMenu und Header. Die Graphiken wurden ebenfalls aus dem Figma file extrahiert, wobei das Header Logo sich nicht vom hintergrund trennen ließ. Der Style des Textes und die Schriftgrößen wurden ebenfalls nicht verändert und sind wie im Figma-File verwendet worden. Zum Debugging wurde der Inspect Modus von firefox und chrome verwendet. Um das Design möglichst flexibel zu halten wurden hauptsächlich FLexboxen und % zahlen verwendet. In den Fällen wo doch px verwendet wurden (wie zum Beispiel Text und Padding) wurde lediglich die Figma abstände verwendet. Normalerweise würde ich hierzu rem oder em bevorzugen da jedoch keine genauen abstände mit diesen einheiten vorlagen wurden sie nicht verwendet.
