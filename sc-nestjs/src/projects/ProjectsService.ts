@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { TaskEntity } from '../database/TaskEntity';
 import { ProjectDTO } from '../database/ProjectDTO';
 import { TaskDTO } from '../database/TaskDTO';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 @Injectable()
 export class ProjectsService {
   constructor(
@@ -12,6 +13,7 @@ export class ProjectsService {
     private projectsRepository: Repository<ProjectEntity>,
     @InjectRepository(TaskEntity)
     private tasksRepository: Repository<TaskEntity>,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
   async getAllProjects(): Promise<any> {
     return this.projectsRepository.find();
@@ -49,6 +51,7 @@ export class ProjectsService {
       description: task.description,
       createdDate: task.createdDate,
     });
+    this.eventEmitter.emit('task.created', newTask);
     await this.tasksRepository.save(newTask);
     return newTask;
   }
@@ -63,6 +66,8 @@ export class ProjectsService {
     return taskEntity;
   }
   async deleteTask(pid: number, tid: number): Promise<any> {
-    return this.projectsRepository.delete(tid);
+    const delRes = this.projectsRepository.delete(tid);
+    this.eventEmitter.emit('task.deleted', delRes);
+    return delRes;
   }
 }
