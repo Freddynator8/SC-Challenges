@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { User } from './User';
-import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
@@ -16,7 +15,6 @@ export class AuthService {
     ],
   ]);
   constructor(private jwtService: JwtService) {}
-  private readonly JWT_SECRET = 'this-should-not-be-in-git';
 
   async validateUser(name: string, password: string): Promise<User | null> {
     const user = this.users.get(name);
@@ -24,7 +22,7 @@ export class AuthService {
       return null;
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    const isPasswordValid = password == user.password;
     if (isPasswordValid) {
       return user;
     }
